@@ -1,0 +1,8 @@
+create file
+create file2
+create file3
+create file4
+search file3
+search file6
+quit
+
