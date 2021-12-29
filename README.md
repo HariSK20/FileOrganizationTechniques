@@ -1,5 +1,7 @@
 # FileOrganizationTechniques
 
+This Lab Program was created to teach myself Header Files and MakeFiles
+
 ## Simulate the following file organization methods:
 1. Single Level
 2. Two Level
