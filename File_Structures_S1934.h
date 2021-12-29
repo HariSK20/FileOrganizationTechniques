@@ -13,12 +13,21 @@ typedef struct Directory
 	char name[NAME_SIZE];
 	int num_files, num_children;
 	struct File *files;
-	struct Directory *children, *parent;
+	struct Directory *parent;
+	struct Directory *children;
+	struct Directory *nextChild;
 }Directory;
+
+char* strrev(char *str);
+
+char* cleanName(char *name);
+
+Directory* addChildDirectory(Directory *parent_dir, Directory *child);
 
 Directory* newDirectory(char *name, Directory *parent);
 
-void getPWD(char *pwd, Directory *dir);
+Directory* changeDirectory(Directory *root, char *dirname);
+void getPWD(char *pwd, Directory *dir, int size);
 
 void indentLine(int indent);
 

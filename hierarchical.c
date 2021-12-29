@@ -5,9 +5,8 @@
 
 int main()
 {
-	// printf("hello %s\n", strrev("worlds"));
-	printf("Program to simulate Two level file organization\n");
-	printf("Available commands: \n  1. quit\n  2. list\n  3. create <filename>\n  4. search <filename>\n  5. adduser <username> \n  6. cd <directoryname>\n");
+	printf("Program to simulate hierarchical file organization\n");
+	printf("Available commands: \n  1. quit\n  2. list\n  3. create <filename>\n  4. search <filename>\n  5. mkdir <username> \n  6. cd <directoryname>\n");
 	char command[8], buf[NAME_SIZE], pwd[NAME_SIZE+5] = "root/";
 	int status;
 	Directory *root = newDirectory("root", NULL);
@@ -16,19 +15,8 @@ int main()
 		printf(">! Quitting\n");
 		return(-1);
 	}
-	Directory *user = NULL;
-	
-	printf(" >> Create new user directory to start!\n > Enter name of user:: ");
-	scanf("%[^\n]s", buf);
-	clearInput();
-	printf(" >> Creating \'%s\' Directory!", buf);
-	user = newDirectory(buf, root);
-	if(user == NULL)
-	{
-		printf(">! Quitting\n");
-		freeDirectory(root);
-		return(-1);
-	}
+	Directory *user = root;
+
 	getPWD(pwd, user, NAME_SIZE+5);
 	
 	do{
@@ -51,7 +39,7 @@ int main()
 		cleanName(buf);
 		if(!strcmp(command, "create"))
 		{
-			// printf("create %s\n", buf);
+			// printf("create %s", buf);
 			addFile(user, buf, &status);
 			if(status == 1)
 				printf("Success");
@@ -64,57 +52,67 @@ int main()
 			status = searchFile(user, buf);
 			if(status == 1)
 				printf("File Found!");
-			else if(status == 0)
+			else
 				printf("File not Found!");
 		}
 		else if(!strcmp(command, "cd"))
 		{
 			// cleanName(buf);
 			// printf("cd %s\n", buf);
-			if(!strcmp(cleanName(buf), ".."))
+			if(!strcmp(buf, ".."))
 			{
-
-				if(strcmp(user->name, "root"))
-					user = root;
-				else
+				if(!strcmp(user->name, "root"))
 					printf(" >! root has no parent directory!");
+				else
+				{
+					user = user->parent;
+				}
+			}
+			else if(!strcmp(buf, "root"))
+			{
+				// if(!strcmp(user->name, "root"))
+				// 	printf(" >! root has no parent directory!");
+				// else
+				// {
+				user = root;
+				// }
 			}
 			else
 			{
-				if(!strcmp(user->name, "root"))
-				{
-					Directory *temp = changeDirectory(root, buf);
-					if(temp == NULL)
-						printf(" Directory does not exist");
-					else
-						user = temp;
-				}
+				// if(!strcmp(user->name, "root"))
+				// {
+				Directory *temp = changeDirectory(user, buf);
+				if(temp == NULL)
+					printf(" Directory does not exist");
 				else
-					printf(" >! There are no other directories inside\n");
+					user = temp;
+				// }
+				// else
+				// 	printf(" >! There are no other directories inside\n");
 			}
 			// if(user == root)
 			// 	printf("success cd!\n");
 			getPWD(pwd, user, NAME_SIZE+5);
 		}
-		else if(!strcmp(command, "adduser"))
+		else if(!strcmp(command, "mkdir"))
 		{
-			// printf("adduser %s\n", buf);
-			if(!strcmp(user->name, "root"))
+			// printf("mkdir %s\n", buf);
+			// if(!strcmp(user->name, "root"))
+			// {
+			Directory *temp = newDirectory(buf, user);
+			if(temp == NULL)
 			{
-				Directory *temp = newDirectory(buf, root);
-				if(temp == NULL)
-				{
-					printf(" >! Error Skipping");
-				}
-				else
-				{
-					user = temp;
-				}
+				printf(" >! Error Skipping");
 			}
 			else
 			{
-				printf(" >! Cannot create a directory inside a user directory, Skipping");
+				user = temp;
 			}
+			// }
+			// else
+			// {
+			// 	printf(" >! Cannot create a directory inside a user directory, Skipping");
+			// }
 			getPWD(pwd, user, NAME_SIZE+5);
 		}
 		else

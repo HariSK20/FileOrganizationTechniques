@@ -17,7 +17,7 @@ int main()
 			break;
 		else if(!strcmp(command, "list"))
 		{
-			printf("list\n");
+			// printf("list\n");
 			clearInput();
 			listDirectory(root, 0);
 			continue;
@@ -25,16 +25,16 @@ int main()
 		scanf("%[^\n]s", buf);
 		if(!strcmp(command, "create"))
 		{
-			printf("create File= %s", buf);
+			// printf("create File= %s", buf);
 			addFile(root, buf, &status);
 			if(status == 1)
-				printf("\nSuccess");
+				printf("Success");
 			else
-				printf("\nFailed");
+				printf("Failed");
 		}
 		else if(!strcmp(command, "search"))
 		{
-			printf("search file = %s\n", buf);
+			// printf("search file = %s\n", buf);
 			status = searchFile(root, buf);
 			if(status == 1)
 				printf("File Found!");
